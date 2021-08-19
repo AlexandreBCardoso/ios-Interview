@@ -66,7 +66,20 @@ class MoviesViewController: UIViewController {
 	
 	private func movieError(_ error: MovieError?) {
 		DispatchQueue.main.async {
-			let alert = UIAlertController(title: "Ops, ocorreu um erro", message: error?.localizedDescription, preferredStyle: .alert)
+			var message = ""
+			
+			switch error {
+				case .urlInvalid:
+					message = "URL inválida"
+				case .notFound:
+					message = "Não foi encontrado dados"
+				case .unknown:
+					message = "Serviço indisponível"
+				default:
+					message = String(describing: error?.localizedDescription)
+			}
+			
+			let alert = UIAlertController(title: "Ops, ocorreu um erro", message: message, preferredStyle: .alert)
 			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 			self.present(alert, animated: true)
 		}
