@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct Movie: Codable {
+struct Movie: Decodable {
 
     let title: String
     let poster: String
