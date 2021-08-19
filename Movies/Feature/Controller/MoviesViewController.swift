@@ -10,7 +10,7 @@ class MoviesViewController: UIViewController {
 	// MARK: - Variable
 	var movieView: MovieView?
 	
-	var movies = [Movie]()
+//	var movies = [Movie]()
 	var viewModel: MoviesViewModel!
 	
 	
@@ -32,8 +32,8 @@ class MoviesViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		viewModel = MoviesViewModel()
 		
+		setupViewModel()
 		setupTableView()
 		setupNavigationController()
 		loadData()
@@ -49,8 +49,12 @@ class MoviesViewController: UIViewController {
 		title = "Filmes Populares"
 	}
 	
-	func loadData() {
-		viewModel.loadContacts { movies, error in
+	private func setupViewModel() {
+		viewModel = MoviesViewModel()
+	}
+	
+	private func loadData() {
+		viewModel?.loadContacts { movies, error in
 			DispatchQueue.main.async {
 				if let error = error {
 					print(error)
@@ -61,7 +65,7 @@ class MoviesViewController: UIViewController {
 					return
 				}
 				
-				self.movies = movies ?? []
+//				self.movies = movies ?? []
 				self.movieView?.tableView.reloadData()
 				self.movieView?.activity.stopAnimating()
 			}
@@ -75,7 +79,7 @@ class MoviesViewController: UIViewController {
 extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return movies.count
+		return viewModel.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,7 +87,8 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
 			return UITableViewCell()
 		}
 		
-		let movie = movies[indexPath.row]
+		let movie = viewModel.getMovie(index: indexPath.row)
+		
 		cell.movieTitleLabel.text = movie.title
 		
 		DispatchQueue.global().async {
@@ -101,9 +106,9 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let filme = movies[indexPath.row]
+		let movie = viewModel.getMovie(index: indexPath.row)
 		
-		let alert = UIAlertController(title: "Atenção", message:"Seu filme é \(filme.title)", preferredStyle: .alert)
+		let alert = UIAlertController(title: "Atenção", message: "Seu filme é \(movie.title)", preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 		self.present(alert, animated: true)
 	}
