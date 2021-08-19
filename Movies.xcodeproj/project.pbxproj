@@ -20,6 +20,7 @@
 		65F83D182627360A00542CF2 /* MoviesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F83D172627360A00542CF2 /* MoviesResponse.swift */; };
 		BC64D57826CDE42300FAD029 /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC64D57726CDE42300FAD029 /* MovieView.swift */; };
 		BC64D57B26CDE4A600FAD029 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC64D57A26CDE4A600FAD029 /* CodeView.swift */; };
+		BC64D57E26CDFA0500FAD029 /* MovieServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC64D57D26CDFA0500FAD029 /* MovieServiceMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		65F83D172627360A00542CF2 /* MoviesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesResponse.swift; sourceTree = "<group>"; };
 		BC64D57726CDE42300FAD029 /* MovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
 		BC64D57A26CDE4A600FAD029 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
+		BC64D57D26CDFA0500FAD029 /* MovieServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieServiceMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 		65F83CCA2627270900542CF2 /* MoviesTests */ = {
 			isa = PBXGroup;
 			children = (
+				BC64D57C26CDF9E700FAD029 /* MockTests */,
 				65F83CCB2627270900542CF2 /* MoviesTests.swift */,
 				65F83CCD2627270900542CF2 /* Info.plist */,
 			);
@@ -187,6 +190,14 @@
 				BC64D57A26CDE4A600FAD029 /* CodeView.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		BC64D57C26CDF9E700FAD029 /* MockTests */ = {
+			isa = PBXGroup;
+			children = (
+				BC64D57D26CDFA0500FAD029 /* MovieServiceMock.swift */,
+			);
+			path = MockTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -305,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC64D57E26CDFA0500FAD029 /* MovieServiceMock.swift in Sources */,
 				65F83CCC2627270900542CF2 /* MoviesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

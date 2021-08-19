@@ -9,15 +9,43 @@ import XCTest
 @testable import Movies
 
 class MoviesTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
+	
+	func testViewModelAPISuccess() {
+		let service: MovieServiceRepository = MovieServiceMock(process: nil)
+		let viewModel = MoviesViewModel(service: service)
+		
+		viewModel.loadMovies { _, _ in
+		}
+		
+		XCTAssert(viewModel.count > 0)
+	}
+	
+	func testViewModelAPIErrorNotFound() {
+		let service: MovieServiceRepository = MovieServiceMock(process: .notFound)
+		let viewModel = MoviesViewModel(service: service)
+		var typeError: MovieError?
+		
+		viewModel.loadMovies { _, error in
+			typeError = error
+		}
+		
+		XCTAssertNotNil(typeError)
+		XCTAssert(typeError == .notFound)
+		XCTAssert(viewModel.count == 0)
+	}
+	
+	func testViewModelReturnMovie() {
+		let service: MovieServiceRepository = MovieServiceMock(process: nil)
+		let viewModel = MoviesViewModel(service: service)
+		let expectedTitle = "Godzilla vs. Kong"
+		
+		viewModel.loadMovies { _, _ in
+		}
+		
+		XCTAssert(viewModel.count > 0)
+		XCTAssert(viewModel.getMovie(index: 0).title == expectedTitle)
+	}
+	
 }
 
 var mockData: Data? {
