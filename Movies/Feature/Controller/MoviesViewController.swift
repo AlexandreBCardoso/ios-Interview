@@ -8,10 +8,8 @@ import UIKit
 class MoviesViewController: UIViewController {
 	
 	// MARK: - Variable
-	var movieView: MovieView?
-	
-//	var movies = [Movie]()
-	var viewModel: MoviesViewModel!
+	private var movieView: MovieView?
+	private var viewModel: MoviesViewModel!
 	
 	
 	// MARK: - Initialize
@@ -54,24 +52,26 @@ class MoviesViewController: UIViewController {
 	}
 	
 	private func loadData() {
-		viewModel?.loadContacts { movies, error in
-			DispatchQueue.main.async {
-				if let error = error {
-					print(error)
-					
-					let alert = UIAlertController(title: "Ops, ocorreu um erro", message: error.localizedDescription, preferredStyle: .alert)
-					alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-					self.present(alert, animated: true)
-					return
-				}
-				
-//				self.movies = movies ?? []
-				self.movieView?.tableView.reloadData()
-				self.movieView?.activity.stopAnimating()
-			}
+		viewModel.loadMovies { success, error in
+			success ? self.movieSuccess() : self.movieError(error)
 		}
 	}
 	
+	private func movieSuccess() {
+		DispatchQueue.main.async {
+			self.movieView?.activity.stopAnimating()
+			self.movieView?.tableView.reloadData()
+		}
+	}
+	
+	private func movieError(_ error: MovieError?) {
+		DispatchQueue.main.async {
+			let alert = UIAlertController(title: "Ops, ocorreu um erro", message: error?.localizedDescription, preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+			self.present(alert, animated: true)
+		}
+	}
+
 }
 
 
@@ -83,25 +83,12 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MovieCell.self), for: indexPath) as? MovieCell else {
-			return UITableViewCell()
-		}
-		
 		let movie = viewModel.getMovie(index: indexPath.row)
 		
-		cell.movieTitleLabel.text = movie.title
+		guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MovieCell.self), for: indexPath) as? MovieCell
+		else { return UITableViewCell() }
 		
-		DispatchQueue.global().async {
-			do {
-				let data = try Data(contentsOf: movie.posterURL)
-				let image = UIImage(data: data)
-				DispatchQueue.main.async {
-					cell.movieImage.image = image
-				}
-				
-			} catch _ {}
-		}
-		
+		cell.setupCell(movie: movie)
 		return cell
 	}
 	

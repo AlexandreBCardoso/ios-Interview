@@ -19,14 +19,15 @@ class MoviesViewModel {
 		self.service = service
 	}
 	
-	func loadContacts(_ completion: @escaping ([Movie]?, MovieError?) -> Void) {
+	func loadMovies(_ completion: @escaping(Bool, MovieError?) -> Void) {
 		service.fetchMovies { result in
 			switch result {
 				case .success(let movies):
 					self.movies = movies
-					completion(movies, nil)
+					completion(true, nil)
+					
 				case .failure(let error):
-					completion(nil, error)
+					completion(false, error)
 			}
 		}
 	}

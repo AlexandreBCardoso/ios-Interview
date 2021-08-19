@@ -34,6 +34,24 @@ class MovieCell: UITableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	
+	// MARK: - Function
+	func setupCell(movie: Movie) {
+		movieTitleLabel.text = movie.title
+		
+		DispatchQueue.global().async {
+			do {
+				let data = try Data(contentsOf: movie.posterURL)
+				let image = UIImage(data: data)
+				DispatchQueue.main.async {
+					self.movieImage.image = image
+				}
+				
+			} catch {}
+		}
+		
+	}
+	
 }
 
 
