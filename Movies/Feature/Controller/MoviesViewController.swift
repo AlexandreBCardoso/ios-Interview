@@ -35,9 +35,7 @@ class MoviesViewController: UIViewController {
 		viewModel = MoviesViewModel()
 		
 		setupTableView()
-		
-		navigationController?.title = "Filmes Populares"
-		
+		setupNavigationController()
 		loadData()
 	}
 	
@@ -45,6 +43,10 @@ class MoviesViewController: UIViewController {
 	// MARK: - Function
 	private func setupTableView() {
 		movieView?.setupDelegates(delegate: self, datasource: self)
+	}
+	
+	private func setupNavigationController() {
+		title = "Filmes Populares"
 	}
 	
 	func loadData() {
@@ -84,17 +86,22 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
 		let movie = movies[indexPath.row]
 		cell.movieTitleLabel.text = movie.title
 		
-		do {
-			let data = try Data(contentsOf: movie.posterURL)
-			let image = UIImage(data: data)
-			cell.movieImage.image = image
-		} catch _ {}
+		DispatchQueue.global().async {
+			do {
+				let data = try Data(contentsOf: movie.posterURL)
+				let image = UIImage(data: data)
+				DispatchQueue.main.async {
+					cell.movieImage.image = image
+				}
+				
+			} catch _ {}
+		}
 		
 		return cell
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let filme = movies[indexPath.row - 1]
+		let filme = movies[indexPath.row]
 		
 		let alert = UIAlertController(title: "Atenção", message:"Seu filme é \(filme.title)", preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
